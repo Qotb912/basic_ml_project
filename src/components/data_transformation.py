@@ -26,99 +26,45 @@ class DataTransformation:
     def __init__(self):
         self.data_transformation_config = DataTranfromationConfig()
 
-    # def get_data_transformer_object(self):
-    #     '''
-    #     this fun is resqpnsible for data transformations
-    #     based on defferent types of data
-    #     '''
-    #     try:
-    #         numerical_columns = ["writing score","reading score"]
-    #         categorical_columns =[
-    #             "gender",
-    #             "race/ethnicity",
-    #             "parental level of education",
-    #             "lunch",
-    #             "test preparation course",
-    #         ]
-
-
-    #         # create pipeline
-    #         num_pipeline = Pipeline(
-    #             steps=[
-    #                 # imputer ==> to handel missing values
-    #                 ("imputer",SimpleImputer(strategy="median")),
-    #                 ("scaler",StandardScaler())
-    #             ]                
-    #         )
-    #         cat_pipeline = Pipeline(
-    #             steps=[
-    #                 ("imputer",SimpleImputer(strategy="most_frequent")),
-    #                 ("one_hot_encoder",OneHotEncoder()),
-    #                 ("scaler",StandardScaler())
-    #             ]
-    #         )
-            
-    #         # logging.info('Numerical columns standard scaling completed')
-    #         # logging.info('Categorical columns encoding completed')
-
-    #         logging.info(f"Categorical columns: {categorical_columns}")
-    #         logging.info(f"Numerical columns: {numerical_columns}")
-
-    #         preprocessor = ColumnTransformer(
-    #             [
-    #                 ("num_pipeline",num_pipeline,numerical_columns),
-    #                 ("cat_pipeline",cat_pipeline,categorical_columns)
-    #             ]
-    #         )
-    #         return preprocessor
-            
-    #     except Exception as e :
-    #         raise CustomException(e,sys)
-    
     def get_data_transformer_object(self):
         '''
-        This function si responsible for data trnasformation
-        
+        this fun is resqpnsible for data transformations
+        based on defferent types of data
         '''
         try:
-            numerical_columns =["writing score","reading score"]
-            #  ["writing_score", "reading_score"]
-            categorical_columns = [ "gender",
+            numerical_columns = ["writing score","reading score"]
+            categorical_columns =[
+                "gender",
                 "race/ethnicity",
                 "parental level of education",
                 "lunch",
                 "test preparation course",
             ]
-            # [
-            #     "gender",
-            #     "race_ethnicity",
-            #     "parental_level_of_education",
-            #     "lunch",
-            #     "test_preparation_course",
-            # ]
 
-            num_pipeline= Pipeline(
+
+            #  # create numerical pipeline
+            num_pipeline = Pipeline(
                 steps=[
-                ("imputer",SimpleImputer(strategy="median")),
-                ("scaler",StandardScaler())
-
+                    # imputer ==> to handel missing values
+                    ("imputer",SimpleImputer(strategy="median")),
+                    ("scaler",StandardScaler())
+                ]                
+            )
+            #  # Create categorical pipeline
+            cat_pipeline = Pipeline(
+                steps=[
+                    ("imputer",SimpleImputer(strategy="most_frequent")),
+                    ("one_hot_encoder",OneHotEncoder()),
+                    ("scaler",StandardScaler(with_mean=False))
                 ]
             )
-
-            cat_pipeline=Pipeline(
-
-                steps=[
-                ("imputer",SimpleImputer(strategy="most_frequent")),
-                ("one_hot_encoder",OneHotEncoder()),
-                ("scaler",StandardScaler(with_mean=False))
-                ]
-
-            )
+            # logging.info('Numerical columns standard scaling completed')
+            # logging.info('Categorical columns encoding completed')
 
             logging.info(f"Categorical columns: {categorical_columns}")
             logging.info(f"Numerical columns: {numerical_columns}")
 
-            preprocessor=ColumnTransformer(
+            preprocessor =ColumnTransformer(
                 [
                 ("num_pipeline",num_pipeline,numerical_columns),
                 ("cat_pipelines",cat_pipeline,categorical_columns)
@@ -127,13 +73,12 @@ class DataTransformation:
 
 
             )
-
             return preprocessor
-        
-        except Exception as e:
+            
+        except Exception as e :
             raise CustomException(e,sys)
-        
-
+    
+   
     
     def initiate_data_transformaion(self,train_path,test_path):
         try:
